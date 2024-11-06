@@ -19,6 +19,7 @@ public class UserController {
 
     @GetMapping
     public Collection<User> findAll() {
+        log.info("Получение списка пользователей.");
         return users.values();
     }
 
@@ -26,22 +27,31 @@ public class UserController {
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
 
-        if (user.getName() == null || user.getName().isEmpty()) {
+        if (checkName(user)) {
             user.setName(user.getLogin());
         }
-
         user.setId(getNextId());
         users.put(user.getId(), user);
+        log.info("Успешное добавление данных пользователя");
         return user;
     }
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User newUser) {
         if (!users.containsKey(newUser.getId())) {
-            throw new ValidationException("Задача не найдена");
+            log.warn("Ошибка поиска пользователя ID не найден");
+            throw new ValidationException("Пользователь " + newUser.getId() + " не найден");
+        }
+        if (checkName(newUser)) {
+            newUser.setName(newUser.getLogin());
         }
         users.put(newUser.getId(), newUser);
+        log.info("Успешное обновление данных пользователя");
         return newUser;
+    }
+
+    private boolean checkName(User user) {
+        return user.getName() == null || user.getName().isEmpty();
     }
 
     private long getNextId() {

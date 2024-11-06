@@ -15,6 +15,7 @@ public class User {
 
     String name;
 
+    @NotBlank(message = "email Не может быть пустым")
     @Email(message = "Неправильно введен email")
     String email;
 
@@ -23,6 +24,7 @@ public class User {
     @Pattern(regexp = "^[^ ]*$", message = "логин не может содержать пробелы")
     String login;
 
+    @NotNull(message = " Не заполнена дата")
     @Past(message = "дата рождения не может быть в будущем.")
     LocalDate birthday;
 
