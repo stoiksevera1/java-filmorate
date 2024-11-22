@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @EqualsAndHashCode(of = {"id"})
 @Data
@@ -13,6 +14,7 @@ public class User {
 
     Long id;
 
+    Set<Long> friends;
     String name;
 
     @NotBlank(message = "email Не может быть пустым")

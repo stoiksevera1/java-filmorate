@@ -6,12 +6,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @EqualsAndHashCode(of = {"id"})
 public class Film {
 
     Long id;
+
+    Set<Long> Likes;
 
     @NotNull
     @NotEmpty
