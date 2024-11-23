@@ -18,6 +18,10 @@ public class InMemoryUserStorage implements UserStorage {
     private final Map<Long, User> users = new HashMap<>();
 
     public User getUser(Long id){
+        if (!users.containsKey(id)) {
+            log.warn("Ошибка поиска пользователя ID не найден");
+            throw new ValidationException("Пользователь " + id + " не найден");
+        }
         return users.get(id);
     }
 

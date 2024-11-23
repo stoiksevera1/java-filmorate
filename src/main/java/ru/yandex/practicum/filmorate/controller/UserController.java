@@ -23,7 +23,7 @@ UserStorage userStorage;
         return userStorage.getUsers();
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     public User getUser(@PathVariable("userId") Long userId){
         return userStorage.getUser(userId);
     }
