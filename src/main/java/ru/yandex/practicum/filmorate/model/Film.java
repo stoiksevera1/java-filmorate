@@ -13,7 +13,7 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"id"})
 public class Film {
 
-    final Set<Long> Likes = new HashSet<>();
+    final Set<Long> likes = new HashSet<>();
 
     Long id;
 
