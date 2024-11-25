@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
@@ -14,7 +15,7 @@ public class Film {
 
     Long id;
 
-    Set<Long> Likes;
+    final Set<Long> Likes = new HashSet<>();
 
     @NotNull
     @NotEmpty

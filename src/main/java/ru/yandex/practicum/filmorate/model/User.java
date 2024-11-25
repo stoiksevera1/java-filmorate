@@ -13,9 +13,9 @@ import java.util.Set;
 @Data
 public class User {
 
-    Long id;
+    final Set<Long> friends = new HashSet<>();
 
-    Set<Long> friends = new HashSet<>();
+    Long id;
 
     String name;
 

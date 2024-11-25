@@ -2,41 +2,49 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.storage.FilmStorage;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/films")
 public class FilmController {
-FilmStorage filmStorage;
+
+    final FilmService filmService;
 
     @GetMapping
     public Collection<Film> findAll() {
-        return filmStorage.getAllFilm();
+        return filmService.filmStorage.getAllFilm();
     }
 
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
-        return filmStorage.addFilm(film);
+        return filmService.filmStorage.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film newFilm) {
-        return filmStorage.updateFilm(newFilm);
+        return filmService.filmStorage.updateFilm(newFilm);
     }
 
+    @PutMapping("/{id}/like/{userId}")
+    public Film addLikeUser(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
+        return filmService.addLikeUser(id, userId);
+    }
 
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film dellLikeUser(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
+        return filmService.dellLikeUser(id, userId);
+    }
 
-
+    @GetMapping("/popular")
+    public Collection<Film> getListFilmsPopular(@RequestParam(value = "count", defaultValue = "10") Long count) {
+        return filmService.getListFilmsPopular(count);
+    }
 
 }

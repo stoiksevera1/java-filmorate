@@ -2,44 +2,66 @@ package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
+
 import ru.yandex.practicum.filmorate.model.User;
-import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.service.UserService;
+
 
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 
-@RequiredArgsConstructor
-@Slf4j
+
+@RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 public class UserController {
-UserStorage userStorage;
+
+
+    private final UserService userService;
 
     @GetMapping
     public Collection<User> getListUsers() {
-        return userStorage.getUsers();
-    }
-
-    @GetMapping("/users/{userId}")
-    public User getUser(@PathVariable("userId") Long userId){
-        return userStorage.getUser(userId);
+        return userService.userStorage.getUsers();
     }
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-    return  userStorage.add(user);
+
+        return userService.userStorage.add(user);
 
     }
+
+    @GetMapping("/{userId}")
+    public User getUser(@PathVariable("userId") Long userId) {
+        return userService.userStorage.getUser(userId);
+    }
+
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User newUser) {
-      return   userStorage.update(newUser);
+        return userService.userStorage.update(newUser);
     }
 
+    @PutMapping("/{id}/friends/{friendId}")
+    public User addFriend(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
 
+        return userService.addFriend(id, friendId);
+    }
+
+    @DeleteMapping("/{id}/friends/{friendId}")
+    public User dellFriend(@PathVariable("id") Long id, @PathVariable("friendId") Long friendId) {
+        return userService.dellFriend(id, friendId);
+    }
+
+    @GetMapping("/{id}/friends")
+    public Collection<User> getFriendsUser(@PathVariable("id") Long id) {
+        return userService.getFriendsUser(id);
+    }
+
+    @GetMapping("/{id}/friends/common/{otherId}")
+    public Collection<User> getListOfMutualFriends(@PathVariable("id") Long id, @PathVariable("otherId") Long otherId) {
+        return userService.getListOfMutualFriends(id, otherId);
+    }
 
 
 }
