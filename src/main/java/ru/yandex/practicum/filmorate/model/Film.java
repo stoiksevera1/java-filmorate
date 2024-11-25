@@ -13,9 +13,9 @@ import java.util.Set;
 @EqualsAndHashCode(of = {"id"})
 public class Film {
 
-    Long id;
-
     final Set<Long> Likes = new HashSet<>();
+
+    Long id;
 
     @NotNull
     @NotEmpty
