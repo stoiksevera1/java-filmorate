@@ -37,10 +37,6 @@ public class UserService {
     }
 
     public Collection<User> getFriendsUser(Long id) {
-        if (userStorage.getUser(id).getFriends().isEmpty()) {
-            log.warn("Список друзей пользователя пуст");
-            throw new NotFoundException("Список друзей пользователя пуст");
-        }
         log.trace("Сформирован cпиcок друзей пользователя c ID :{}", id);
         return userStorage.getUser(id).getFriends().stream()
                 .map(userStorage::getUser)

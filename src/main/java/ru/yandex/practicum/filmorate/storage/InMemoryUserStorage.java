@@ -20,7 +20,7 @@ public class InMemoryUserStorage implements UserStorage {
     public User getUser(Long id) {
         if (!users.containsKey(id)) {
             log.warn("Пользователь c ID{} не найден", id);
-            throw new NotFoundException("Пользователь c ID" + id + " не найден");
+            throw new NotFoundException("Пользователь c ID " + id + " не найден");
         }
         return users.get(id);
     }
