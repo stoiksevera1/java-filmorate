@@ -1,74 +1,55 @@
 package ru.yandex.practicum.filmorate.controller;
 
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-import ru.yandex.practicum.filmorate.exception.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.service.FilmService;
 
 
-import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @RestController
-@Slf4j
-
+@RequiredArgsConstructor
 @RequestMapping("/films")
 public class FilmController {
-    private final Map<Long, Film> films = new HashMap<>();
+
+    private final FilmService filmService;
 
     @GetMapping
     public Collection<Film> findAll() {
-        log.info("Получение списка фильмов.");
-        return films.values();
+        return filmService.getAllFilm();
     }
 
+    @GetMapping("/{id}")
+    public Film getFilmById(@PathVariable("id") Long id) {
+        return filmService.getFilmById(id);
+    }
 
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
-
-        if (checkDate(film.getReleaseDate())) {
-            log.warn("Ошибка валидации по времени при добовление фильма");
-            throw new ValidationException("Раньше даты первого фильма");
-        }
-
-        film.setId(getNextId());
-        films.put(film.getId(), film);
-        log.info("Успешнон добавление фильма");
-        return film;
+        return filmService.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film newFilm) {
-
-        if (!films.containsKey(newFilm.getId())) {
-            log.warn("Не найден по id");
-            throw new ValidationException("Фильм " + newFilm.getName() + "не найден");
-        }
-
-        if (checkDate(newFilm.getReleaseDate())) {
-            log.warn("Ошибка валидации по времени при обновлении фильма");
-            throw new ValidationException("Раньше даты первого фильма");
-
-        }
-        films.put(newFilm.getId(), newFilm);
-        log.info("Успешнон обновление фильма");
-        return newFilm;
+        return filmService.updateFilm(newFilm);
     }
 
-
-    private boolean checkDate(LocalDate data) {
-        return data.isBefore(LocalDate.of(1895, 12, 28));
+    @PutMapping("/{id}/like/{userId}")
+    public Film addLikeUser(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
+        return filmService.addLikeUser(id, userId);
     }
 
-    private long getNextId() {
-        long currentMaxId = films.keySet()
-                .stream()
-                .mapToLong(id -> id)
-                .max()
-                .orElse(0);
-        return ++currentMaxId;
+    @DeleteMapping("/{id}/like/{userId}")
+    public Film dellLikeUser(@PathVariable("id") Long id, @PathVariable("userId") Long userId) {
+        return filmService.dellLikeUser(id, userId);
     }
+
+    @GetMapping("/popular")
+    public Collection<Film> getListFilmsPopular(@RequestParam(value = "count", defaultValue = "10") Long count) {
+        return filmService.getListFilmsPopular(count);
+    }
+
 }

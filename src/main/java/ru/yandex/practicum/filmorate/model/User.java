@@ -6,10 +6,14 @@ import lombok.EqualsAndHashCode;
 
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @EqualsAndHashCode(of = {"id"})
 @Data
 public class User {
+
+    final Set<Long> friends = new HashSet<>();
 
     Long id;
 
