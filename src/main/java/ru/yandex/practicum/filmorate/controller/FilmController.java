@@ -15,21 +15,26 @@ import java.util.Collection;
 @RequestMapping("/films")
 public class FilmController {
 
-    final FilmService filmService;
+    private final FilmService filmService;
 
     @GetMapping
     public Collection<Film> findAll() {
-        return filmService.filmStorage.getAllFilm();
+        return filmService.getAllFilm();
+    }
+
+    @GetMapping("/{id}")
+    public Film getFilmById(@PathVariable("id") Long id) {
+        return filmService.getFilmById(id);
     }
 
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
-        return filmService.filmStorage.addFilm(film);
+        return filmService.addFilm(film);
     }
 
     @PutMapping
     public Film updateFilm(@Valid @RequestBody Film newFilm) {
-        return filmService.filmStorage.updateFilm(newFilm);
+        return filmService.updateFilm(newFilm);
     }
 
     @PutMapping("/{id}/like/{userId}")

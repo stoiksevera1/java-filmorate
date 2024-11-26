@@ -24,7 +24,13 @@ public class ErrorHandler {
         return new ErrorResponse("error", "Не коректно введены данные");
     }
 
-    //@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+
+    @ExceptionHandler(Throwable.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse throwableException() {
+        return new ErrorResponse("error", "Ошибка сервера");
+    }
+
 }
 
 

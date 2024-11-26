@@ -6,11 +6,12 @@ import java.util.Collection;
 
 public interface FilmStorage {
 
-    public Film addFilm(Film film);
+    Film addFilm(Film film);
 
-    public Film updateFilm(Film film);
+    Film updateFilm(Film film);
 
-    public Collection<Film> getAllFilm();
+    Collection<Film> getAllFilm();
 
-    public Film getFilmById(Long id);
+    Film getFilmById(Long id);
 }
+

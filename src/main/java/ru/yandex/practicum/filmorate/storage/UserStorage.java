@@ -7,11 +7,11 @@ import java.util.Collection;
 
 public interface UserStorage {
 
-    public User add(User user);
+    User add(User user);
 
-    public User update(User user);
+    User update(User user);
 
-    public Collection<User> getUsers();
+    Collection<User> getUsers();
 
-    public User getUser(Long id);
+    User getUser(Long id);
 }

@@ -16,30 +16,27 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class UserController {
 
-
     private final UserService userService;
 
     @GetMapping
     public Collection<User> getListUsers() {
-        return userService.userStorage.getUsers();
+        return userService.getUsers();
     }
 
     @PostMapping
     public User createUser(@Valid @RequestBody User user) {
-
-        return userService.userStorage.add(user);
-
+        return userService.createUser(user);
     }
 
     @GetMapping("/{userId}")
     public User getUser(@PathVariable("userId") Long userId) {
-        return userService.userStorage.getUser(userId);
+        return userService.getUser(userId);
     }
 
 
     @PutMapping
     public User updateUser(@Valid @RequestBody User newUser) {
-        return userService.userStorage.update(newUser);
+        return userService.updateUser(newUser);
     }
 
     @PutMapping("/{id}/friends/{friendId}")

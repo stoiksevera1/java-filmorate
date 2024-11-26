@@ -16,25 +16,44 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class FilmService {
-    public final FilmStorage filmStorage;
-    public final UserStorage userStorage;
+    private final FilmStorage filmStorage;
+    private final UserStorage userStorage;
 
     public Film addLikeUser(Long id, Long userId) {
-        if (userStorage.getUser(userId) != null)
-            filmStorage.getFilmById(id).getLikes().add(userId);
+        userStorage.getUser(userId);
+        log.info("Добавление лайка пользователя.");
+        filmStorage.getFilmById(id).getLikes().add(userId);
         return filmStorage.getFilmById(id);
     }
 
     public Film dellLikeUser(Long id, Long userId) {
-        if (userStorage.getUser(userId) != null)
-            filmStorage.getFilmById(id).getLikes().remove(userId);
+        userStorage.getUser(userId);
+        log.info("Удаление лайка пользователя.");
+        filmStorage.getFilmById(id).getLikes().remove(userId);
         return filmStorage.getFilmById(id);
     }
 
     public Collection<Film> getListFilmsPopular(Long count) {
+        log.info("Получение списка фильмов отсортированных по количеству лайков.");
         return filmStorage.getAllFilm().stream()
                 .sorted(Comparator.comparing(film -> film.getLikes().size()))
                 .limit(count)
                 .collect(Collectors.toSet());
+    }
+
+    public Collection<Film> getAllFilm() {
+        return filmStorage.getAllFilm();
+    }
+
+    public Film addFilm(Film film) {
+        return filmStorage.addFilm(film);
+    }
+
+    public Film updateFilm(Film newFilm) {
+        return filmStorage.updateFilm(newFilm);
+    }
+
+    public Film getFilmById(Long id) {
+        return filmStorage.getFilmById(id);
     }
 }
