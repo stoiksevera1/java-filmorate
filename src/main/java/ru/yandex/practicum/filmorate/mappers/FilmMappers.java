@@ -1,10 +1,8 @@
 package ru.yandex.practicum.filmorate.mappers;
 
 import ru.yandex.practicum.filmorate.dto.FilmDto;
-import ru.yandex.practicum.filmorate.dto.RatingDto;
 import ru.yandex.practicum.filmorate.model.Film;
-import ru.yandex.practicum.filmorate.model.Genre;
-import ru.yandex.practicum.filmorate.model.Rating;
+
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
