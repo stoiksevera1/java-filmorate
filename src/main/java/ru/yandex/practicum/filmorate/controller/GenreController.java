@@ -15,7 +15,7 @@ import java.util.Collection;
 @RequestMapping("/genres")
 public class GenreController {
 
-    final private GenreService genreService;
+    private final GenreService genreService;
 
     @GetMapping
     public Collection<GenreDto> findAll() {

@@ -16,7 +16,7 @@ import java.util.Collection;
 @RequestMapping("/mpa")
 public class RatingController {
 
-    final private RatingService ratingService;
+    private final RatingService ratingService;
 
     @GetMapping
     public Collection<RatingDto> findAll() {
