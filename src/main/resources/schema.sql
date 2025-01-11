@@ -1,0 +1,49 @@
+CREATE TABLE IF NOT EXISTS users
+(
+id   INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255),
+email VARCHAR(255) NOT NULL,
+login VARCHAR(255) NOT NULL,
+birthday TIMESTAMP NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS friends
+(
+user_id INT REFERENCES users (id),
+friend_id INT REFERENCES users (id),
+status VARCHAR(255)
+);
+
+CREATE TABLE IF NOT EXISTS film_rating
+(id   INT  PRIMARY KEY,
+name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS films
+(
+id   INT AUTO_INCREMENT PRIMARY KEY,
+name VARCHAR(255) NOT NULL,
+description VARCHAR(255) NOT NULL,
+duration INT NOT NULL,
+release_date TIMESTAMP NOT NULL,
+id_rating INT REFERENCES film_rating (id)
+);
+
+CREATE TABLE IF NOT EXISTS likes
+(
+user_id INT REFERENCES users (id),
+film_id INT REFERENCES films (id)
+);
+
+
+CREATE TABLE IF NOT EXISTS genre
+(
+id   INT  PRIMARY KEY,
+name VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS genre_films
+(
+film_id INT REFERENCES films (id),
+genre_id INT REFERENCES genre (id)
+);

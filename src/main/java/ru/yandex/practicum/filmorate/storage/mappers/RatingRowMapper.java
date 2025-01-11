@@ -1,0 +1,26 @@
+package ru.yandex.practicum.filmorate.storage.mappers;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.model.Rating;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+
+@Component
+public class RatingRowMapper implements RowMapper<Rating> {
+
+    @Override
+    public Rating mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+        Rating rating;
+        rating = Rating.builder()
+                .id(rs.getLong(1))
+                .name(rs.getString(2))
+                .build();
+        return rating;
+    }
+}
