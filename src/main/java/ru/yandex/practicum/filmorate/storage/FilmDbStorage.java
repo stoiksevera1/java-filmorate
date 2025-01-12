@@ -122,12 +122,12 @@ public class FilmDbStorage implements FilmStorage {
         Map<Long, List<Long>> mapLikesList = new HashMap<>();
         jdbcTemplate.query(sqlQueryLikes, rs -> {
             while (rs.next()) {
-                Long film_id = rs.getLong("film_id");
+                Long filmId = rs.getLong("film_id");
 
-                if (!mapLikesList.containsKey(film_id)) {
-                    mapLikesList.put(film_id, new ArrayList<>());
+                if (!mapLikesList.containsKey(filmId)) {
+                    mapLikesList.put(filmId, new ArrayList<>());
                 }
-                mapLikesList.get(film_id).add(rs.getLong("user_id"));
+                mapLikesList.get(filmId).add(rs.getLong("user_id"));
             }
         });
 
