@@ -50,12 +50,14 @@ public class FilmService {
     }
 
     public List<FilmDto> getAllFilm() {
+        log.info("Получение списка фильмов.");
         return filmStorage.getAllFilm().stream()
                 .map(FilmMappers::toDto)
                 .collect(Collectors.toList());
     }
 
     public FilmDto addFilm(FilmDto filmDto) {
+        log.info("Добавление фильма.");
         Film film = FilmMappers.toModel(filmDto);
         if (checkDate(film.getReleaseDate())) {
             log.warn("Ошибка валидации по времени при добовление фильма");
@@ -65,11 +67,13 @@ public class FilmService {
     }
 
     public FilmDto updateFilm(FilmDto filmDto) {
+        log.info("Обновление фильма.");
         Film film = FilmMappers.toModel(filmDto);
         return FilmMappers.toDto(filmStorage.updateFilm(film));
     }
 
     public FilmDto getFilmById(Long id) {
+        log.info("Получение фильма по ID.");
         return FilmMappers.toDto(filmStorage.getFilmById(id));
     }
 

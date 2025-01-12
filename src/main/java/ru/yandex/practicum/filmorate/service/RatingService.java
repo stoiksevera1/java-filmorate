@@ -21,6 +21,7 @@ public class RatingService {
 
 
     public Collection<RatingDto> getAllRatings() {
+        log.info("Получение списка MPA.");
         return ratingDbStorage.getAllRating().stream()
                 .map(RatingMappers::toDto)
                 .collect(Collectors.toList());
@@ -28,6 +29,7 @@ public class RatingService {
 
 
     public RatingDto getRatingById(Long id) {
+        log.info("Получение рейтинга по ID.");
         return RatingMappers.toDto(ratingDbStorage.getRatingById(id));
     }
 }

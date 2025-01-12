@@ -34,7 +34,8 @@ public class FilmDbStorage implements FilmStorage {
 
     @Override
     public Film addFilm(Film film) {
-        String sqlQuery = "insert into films(name, description, duration, release_date, id_rating)" + "values(?, ?, ?, ?, ?)";
+        String sqlQuery = "insert into films(name, description, duration, release_date, id_rating)"
+                + "values(?, ?, ?, ?, ?)";
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -79,7 +80,8 @@ public class FilmDbStorage implements FilmStorage {
             validationMpa(idRating);
         }
 
-        String sqlQuery = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, id_rating = ? WHERE id = ?";
+        String sqlQuery = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, id_rating = ? " +
+                "WHERE id = ?";
         int rowsUpdated = jdbcTemplate.update(sqlQuery,
                 film.getName(),
                 film.getDescription(),
@@ -105,7 +107,8 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> getAllFilm() {
         List<Film> films;
-        String sqlQuery = "SELECT * FROM films";
+        String sqlQuery = "SELECT f.id, f.name, f.description, f.duration, f.release_date, f.id_rating, fr.name " +
+                "FROM films AS f LEFT JOIN film_rating AS fr ON f.id = fr.id";
         try {
             films = jdbcTemplate.query(sqlQuery, filmRowMapper);
         } catch (EmptyResultDataAccessException e) {
@@ -113,11 +116,27 @@ public class FilmDbStorage implements FilmStorage {
             throw new NotFoundException("Список пуст");
         }
 
+
+        final String sqlQueryLikes = "SELECT film_id, user_id FROM likes";
+
+        Map<Long, List<Long>> mapLikesList = new HashMap<>();
+        jdbcTemplate.query(sqlQueryLikes, rs -> {
+            while (rs.next()) {
+                Long film_id = rs.getLong("film_id");
+
+                if (!mapLikesList.containsKey(film_id)) {
+                    mapLikesList.put(film_id, new ArrayList<>());
+                }
+                mapLikesList.get(film_id).add(rs.getLong("user_id"));
+            }
+        });
+
         for (Film film : films) {
-            final String sqlQueryLikes = "SELECT user_id FROM likes WHERE film_id = ?";
-            Long count = film.getId();
-            film.setLikes(jdbcTemplate.queryForList(sqlQueryLikes, Long.class, count));
+            if (mapLikesList.containsKey(film.getId())) {
+                film.setLikes(mapLikesList.get(film.getId()));
+            }
         }
+
         return films;
     }
 
@@ -125,7 +144,8 @@ public class FilmDbStorage implements FilmStorage {
     public Film getFilmById(Long id) {
 
         Film film;
-        String sqlQuery = "SELECT id, name, description, duration, release_date, id_rating FROM films WHERE id = ?";
+        String sqlQuery = "SELECT f.id, f.name, f.description, f.duration, f.release_date, f.id_rating, fr.name " +
+                "FROM films AS f LEFT JOIN film_rating AS fr ON f.id_rating = fr.id WHERE f.id = ?";
         try {
             film = jdbcTemplate.queryForObject(sqlQuery, filmRowMapper, id);
         } catch (EmptyResultDataAccessException e) {
@@ -136,10 +156,8 @@ public class FilmDbStorage implements FilmStorage {
         final String sqlQueryLikes = "SELECT user_id FROM likes WHERE film_id = ?";
         List<Long> listUserId = jdbcTemplate.queryForList(sqlQueryLikes, Long.class, id);
         List<Long> listId = jdbcTemplate.queryForList(sqlQueryGenre, Long.class, id);
-        List<Genre> genresfilm = listId.stream()
-                .map(idF -> Genre.builder().id(idF)
-                        .name(genreDbStorage.getGenreById(idF).getName())
-                        .build())
+        List<Genre> genresfilm = genreDbStorage.getAllGenre().stream()
+                .filter(genre -> listId.contains(genre.getId()))
                 .toList();
         assert film != null;
         film.setGenres(genresfilm);

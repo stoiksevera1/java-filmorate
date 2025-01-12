@@ -19,6 +19,7 @@ public class GenreService {
 
 
     public Collection<GenreDto> getAllGenre() {
+        log.info("Получение списка жанров.");
         return genreDbStorage.getAllGenre().stream()
                 .map(GenreMappers::toDto)
                 .collect(Collectors.toList());
@@ -26,6 +27,7 @@ public class GenreService {
 
 
     public GenreDto getGenreById(Long id) {
+        log.info("Получение жанра по ID.");
         return GenreMappers.toDto(genreDbStorage.getGenreById(id));
     }
 
