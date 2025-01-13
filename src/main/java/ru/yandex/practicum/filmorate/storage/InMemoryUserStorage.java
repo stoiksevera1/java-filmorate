@@ -34,9 +34,6 @@ public class InMemoryUserStorage implements UserStorage {
     }
 
     public User add(User user) {
-        if (checkName(user)) {
-            user.setName(user.getLogin());
-        }
         user.setId(getNextId());
         users.put(user.getId(), user);
         log.warn("Успешное добавление данных пользователя");
@@ -48,18 +45,11 @@ public class InMemoryUserStorage implements UserStorage {
             log.warn("Ошибка поиска пользователя ID не найден");
             throw new NotFoundException("Пользователь " + newUser.getId() + " не найден");
         }
-        if (checkName(newUser)) {
-            newUser.setName(newUser.getLogin());
-        }
         users.put(newUser.getId(), newUser);
         log.info("Успешное обновление данных пользователя");
         return newUser;
     }
 
-
-    private boolean checkName(User user) {
-        return user.getName() == null || user.getName().isEmpty();
-    }
 
     private long getNextId() {
         long currentMaxId = users.keySet()

@@ -13,5 +13,9 @@ public interface FilmStorage {
     Collection<Film> getAllFilm();
 
     Film getFilmById(Long id);
+
+    void addLikeUser(Long id, Long userId);
+
+    void dellLikeUser(Long id, Long userId);
 }
 

@@ -66,4 +66,12 @@ public class InMemoryFilmStorage implements FilmStorage {
         return data.isBefore(LocalDate.of(1895, 12, 28));
     }
 
+    @Override
+    public void addLikeUser(Long id, Long userId) {
+    }
+
+    @Override
+    public void dellLikeUser(Long id, Long userId) {
+
+    }
 }
